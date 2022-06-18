@@ -92,7 +92,7 @@ public class Player {
             if (data.Actions.Count > 0) {
                 Texture icon = data.Actions[0].GetIcon();
                 if (icon != Texture.None) {
-                    ARender.Draw(icon, new Rectangle(data.Position.ToPoint().Sub(15), new Point(60)));
+                    ARender.Draw(icon, new Rectangle(data.Position.ToPoint().Sub(20), new Point(60)));
                 }
             }
 
