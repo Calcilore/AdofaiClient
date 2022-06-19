@@ -21,7 +21,7 @@ public static class Assets {
     public static void Load() {
         Content = MainGame.Game.Content;
         
-        textures = new Texture2D[3];
+        textures = new Texture2D[(int)Texture.Count - 1];
         
         LoadTexture("Events/Twirl1");
         LoadTexture("Events/Twirl2");
@@ -33,5 +33,6 @@ public enum Texture {
     None,
     Twirl1,
     Twirl2,
-    Bunny
+    Bunny,
+    Count // Texture count, includes None.
 }
