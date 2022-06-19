@@ -78,22 +78,26 @@ public class Player {
         for (int i = 0; i < level.Data.Length; i++) {
             Tile data = level.Data[i];
             
-            ARender.DrawBlankCentered(new Rectangle(data.Position.ToPoint(), new Point(60)), Color.Black); /* Debug
-            ARender.DrawBlank(new Rectangle(
-                data.Position.ToPoint() - new Vector2(50,0).Rotate(data.Angle*-180).ToPoint(), 
-                new Point(140, 50)), data.MidspinType == MidspinType.Endspin ? Color.Aqua : Color.Black, 
-                rotation:data.Angle*-180, origin:new Vector2(.5f, .5f)); /**/
+            //ARender.DrawBlankCentered(new Rectangle(data.Position.ToPoint(), new Point(60)), Color.Black); /* Debug
+            Rectangle drawRect = new Rectangle(
+                data.Position.ToPoint() - new Vector2(50, 0).Rotate(data.Angle * -180).ToPoint(),
+                new Point(140, 50));
+            ARender.DrawBlank(drawRect, data.MidspinType == MidspinType.Endspin ? Color.Aqua : new Color(30, 30, 30), 
+                rotation:data.Angle*-180, origin:new Vector2(.5f, .5f)); 
+            ARender.DrawBlank(new Rectangle(drawRect.Location.Add(0), new Point(120, 30)),
+                rotation:data.Angle*-180, origin:new Vector2(.5f, .5f), color:new Color(50, 50, 50));
+            /**/
 
-            if (data.Actions.Count > 0) {
-                Texture icon = data.Actions[0].GetIcon();
+            if (i != 0 && level.Data[i-1].Actions.Count > 0) {
+                Texture icon = level.Data[i-1].Actions[0].GetIcon();
                 if (icon != Texture.None) {
-                    ARender.Draw(icon, new Rectangle(data.Position.ToPoint().Sub(20), new Point(60)));
+                    ARender.Draw(icon, new Rectangle(level.Data[i-1].Position.ToPoint().Sub(20), new Point(60)));
                 }
             }
 
             //if (i == tile) Console.WriteLine(data.Angle * 180);
 
-            ARender.DrawString(data.Timing.ToString(), Align.Left, data.Position.ToPoint(), 6, depth:.8f);
+            //ARender.DrawString(data.Timing.ToString(), Align.Left, data.Position.ToPoint(), 6, depth:.8f);
         }
 
         // make midspins not flash colors for one frame
