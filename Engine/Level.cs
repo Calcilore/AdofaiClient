@@ -57,18 +57,23 @@ public class Level : IScene {
             // Get BPM
             bps = settings.GetProperty("bpm").GetSingle() * MainGame.BpsC;
         }
-
-        // Get Angle Data
-        // Adofai file values divided by 180, and a 0 added at the start of the array
-        JsonElement element = doc.RootElement.GetProperty("angleData");
-        float[] angleData = new float[element.GetArrayLength() + 1];
-        angleData[0] = 0;
-
-        for (int i = 0; i < element.GetArrayLength(); i++) {
-            float f = element[i].GetSingle();
-            angleData[i + 1] = f / 180;
-        }
         
+        // Get Angle Data
+        float[] angleData;
+        if (doc.RootElement.TryGetProperty("angleData", out JsonElement element)) {
+            // Adofai file values divided by 180, and a 0 added at the start of the array
+            angleData = new float[element.GetArrayLength() + 1];
+            angleData[0] = 0;
+
+            for (int i = 0; i < element.GetArrayLength(); i++) {
+                float f = element[i].GetSingle();
+                angleData[i + 1] = f / 180;
+            }   
+        }
+        else {
+            angleData = Legacy.GetAngleData(doc.RootElement.GetProperty("pathData"));
+        }
+
         // Get Action Data
         List<JsonElement>[] actions = new List<JsonElement>[angleData.Length];
 

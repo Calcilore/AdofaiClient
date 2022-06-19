@@ -18,11 +18,12 @@ public class Player {
     private int tile;
     private bool finished = true;
     private Point pos;
+    private bool dead;
+    private bool auto = true;
     
     // Event Variables
     public bool Twirl;
-
-    // Temporary variables for movement
+    
     private float lastTime;
 
     public Player(Level level) {
@@ -32,7 +33,7 @@ public class Player {
 
         lastTime = 0;
         
-        AudioManager.LoadSong("/home/adam/Desktop/crucify.ogg", 60);
+        AudioManager.LoadSong("Levels/1/audio.ogg", 60);
         AudioManager.Play();
         AudioManager.SetPause(true);
         AudioManager.Offset = 1f / level.bps;
@@ -51,11 +52,14 @@ public class Player {
         if (finished) return;
 
         Tile nextTile = level.Data[tile + 1];
-
+        
         float timing = (nextTile.Timing - curTile.Timing);
-        if (angle > timing) {
+        
+        if (auto ?
+        angle > timing : 
+        Math.Abs(angle - timing) < 0.5f && Keyboard.PressedKeys.Length > 0) {
             lastTime += timing / level.bps;
-            
+        
             tile++;
 
             foreach (Action action in nextTile.Actions) {
@@ -71,6 +75,9 @@ public class Player {
             if (tile+1 >= level.Data.Length) {
                 finished = true;
             }
+        }
+        else if (angle - timing > 1f) {
+            dead = true;
         }
     }
 
@@ -104,12 +111,13 @@ public class Player {
         int tCol = tile + (level.Data[tile].MidspinType == MidspinType.Midspin ? 1 : 0);
 
         ARender.DrawBlankCentered(new Rectangle(pos, new Point(40)), Colors[tCol % 2]);
-        ARender.DrawBlankCentered(
-            new Rectangle(
-                (Vector2.UnitX * -100).Rotate((angle * (Twirl ? -1 : 1) - level.Data[tile].Angle) * 180).ToPoint() + pos, 
-                new Point(40)), 
-            Colors[(tCol + 1) % 2], rotation:(angle * (Twirl ? -1 : 1) - level.Data[tile].Angle) * 180
-        );
+        if (!dead)
+            ARender.DrawBlankCentered(
+                new Rectangle(
+                    (Vector2.UnitX * -100).Rotate((angle * (Twirl ? -1 : 1) - level.Data[tile].Angle) * 180).ToPoint() + pos, 
+                    new Point(40)), 
+                Colors[(tCol + 1) % 2], rotation:(angle * (Twirl ? -1 : 1) - level.Data[tile].Angle) * 180
+            );
         Camera.TargetPosition = pos.ToVector2();
     }
 }
