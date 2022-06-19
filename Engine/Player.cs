@@ -24,8 +24,7 @@ public class Player {
 
     // Temporary variables for movement
     private float lastTime;
-    private int fuck = -1;
-    
+
     public Player(Level level) {
         this.level = level;
         MainGame.UpdateEvent += Update;
@@ -36,30 +35,26 @@ public class Player {
         AudioManager.LoadSong("/home/adam/Desktop/crucify.ogg", 60);
         AudioManager.Play();
         AudioManager.SetPause(true);
-        AudioManager.Offset = 2f / level.bps;
+        AudioManager.Offset = 1f / level.bps;
         AudioManager.SetVolume(80);
     }
 
     private void Update() {
-        fuck--;
         if (Keyboard.IsKeyPressed(Keys.Space)) {
             finished = false;
             AudioManager.SetPause(false);
         }
-        
-        Console.WriteLine(AudioManager.GetFrameTimeOffset());
-        
+
         Tile curTile = level.Data[tile];
         angle = (AudioManager.GetFrameTimeOffset() - lastTime) * level.bps;
 
         if (finished) return;
 
         Tile nextTile = level.Data[tile + 1];
-        
-        if (angle > (nextTile.Timing - curTile.Timing)) {
-            fuck = 5;
-            
-            lastTime = AudioManager.GetFrameTimeOffset();
+
+        float timing = (nextTile.Timing - curTile.Timing);
+        if (angle > timing) {
+            lastTime += timing / level.bps;
             
             tile++;
 
@@ -112,7 +107,5 @@ public class Player {
             Colors[(tCol + 1) % 2], rotation:(angle * (Twirl ? -1 : 1) - level.Data[tile].Angle) * 180
         );
         Camera.TargetPosition = pos.ToVector2();
-        
-        //if (fuck >= 0) ARender.DrawBlank(new Rectangle((int)(-960 + Camera.Position.X), (int)(-540 + Camera.Position.Y), 1920, 1080), Color.Black, depth:.8f);
     }
 }
