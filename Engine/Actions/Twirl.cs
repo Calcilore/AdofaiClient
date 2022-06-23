@@ -4,11 +4,11 @@ using Texture = Adofai.Render.Texture;
 namespace Adofai.Engine.Actions; 
 
 public class Twirl : Action {
-    public override void OnLoad(Level l) {
+    public override void OnLoad(AdofaiFile l) {
         l.Twirl = !l.Twirl;
     }
 
-    public override void OnLand(Player p, Level _) {
+    public override void OnLand(Player p, AdofaiFile _) {
         p.Twirl = !p.Twirl;
     }
 

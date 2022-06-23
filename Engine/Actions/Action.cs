@@ -4,13 +4,13 @@ using Adofai.Render;
 namespace Adofai.Engine.Actions; 
 
 public class Action {
-    public virtual void OnLand(Player p, Level l) {}
-    public virtual void OnLoad(Level l) {}
+    public virtual void OnLand(Player p, AdofaiFile l) {}
+    public virtual void OnLoad(AdofaiFile l) {}
     
     public virtual Texture GetIcon() { return Texture.None; }
     
 
-    public static Action jsonToAction(JsonElement element, Level l) {
+    public static Action jsonToAction(JsonElement element, AdofaiFile l) {
         Action a = null;
         
         switch (element.GetProperty("eventType").GetString()) {

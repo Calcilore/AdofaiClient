@@ -12,7 +12,7 @@ namespace Adofai.Engine;
 public class Player {
     private static readonly Color[] Colors = new[] { Color.Red, Color.Blue};
     
-    private Level level;
+    private AdofaiFile level;
 
     private float angle;
     private int tile;
@@ -26,7 +26,7 @@ public class Player {
     
     private float lastTime;
 
-    public Player(Level level) {
+    public Player(AdofaiFile level) {
         this.level = level;
         MainGame.UpdateEvent += Update;
         MainGame.DrawEvent += Draw;
@@ -36,7 +36,7 @@ public class Player {
         AudioManager.LoadSong("Levels/1/audio.ogg", 60);
         AudioManager.Play();
         AudioManager.SetPause(true);
-        AudioManager.Offset = 1f / level.bps;
+        AudioManager.Offset = 1f / level.Bps;
         AudioManager.SetVolume(80);
     }
 
@@ -46,19 +46,18 @@ public class Player {
             AudioManager.SetPause(false);
         }
 
-        Tile curTile = level.Data[tile];
-        angle = (AudioManager.GetFrameTimeOffset() - lastTime) * level.bps;
+        Tile curTile = level.TileData[tile];
+        angle = (AudioManager.GetFrameTimeOffset() - lastTime) * level.Bps;
 
         if (finished) return;
 
-        Tile nextTile = level.Data[tile + 1];
+        Tile nextTile = level.TileData[tile + 1];
         
         float timing = (nextTile.Timing - curTile.Timing);
         
-        if (auto ?
-        angle > timing : 
-        Math.Abs(angle - timing) < 0.5f && Keyboard.PressedKeys.Length > 0) {
-            lastTime += timing / level.bps;
+        if (auto ? angle > timing : 
+                   Math.Abs(angle - timing) < 0.5f && Keyboard.PressedKeys.Length > 0) {
+            lastTime += timing / level.Bps;
         
             tile++;
 
@@ -72,7 +71,7 @@ public class Player {
             }
             else if (nextTile.MidspinType == MidspinType.Midspin) angle = 1f;
 
-            if (tile+1 >= level.Data.Length) {
+            if (tile+1 >= level.TileData.Count) {
                 finished = true;
             }
         }
@@ -82,8 +81,8 @@ public class Player {
     }
 
     private void Draw() {
-        for (int i = 0; i < level.Data.Length; i++) {
-            Tile data = level.Data[i];
+        for (int i = 0; i < level.TileData.Count; i++) {
+            Tile data = level.TileData[i];
             
             //ARender.DrawBlankCentered(new Rectangle(data.Position.ToPoint(), new Point(60)), Color.Black); /* Debug
             Rectangle drawRect = new Rectangle(
@@ -95,10 +94,10 @@ public class Player {
                 rotation:data.Angle*-180, origin:new Vector2(.5f, .5f), color:new Color(50, 50, 50));
             /**/
 
-            if (i != 0 && level.Data[i-1].Actions.Count > 0) {
-                Texture icon = level.Data[i-1].Actions[0].GetIcon();
+            if (i != 0 && level.TileData[i-1].Actions.Count > 0) {
+                Texture icon = level.TileData[i-1].Actions[0].GetIcon();
                 if (icon != Texture.None) {
-                    ARender.Draw(icon, new Rectangle(level.Data[i-1].Position.ToPoint().Sub(20), new Point(60)));
+                    ARender.Draw(icon, new Rectangle(level.TileData[i-1].Position.ToPoint().Sub(20), new Point(60)));
                 }
             }
 
@@ -108,15 +107,15 @@ public class Player {
         }
 
         // make midspins not flash colors for one frame
-        int tCol = tile + (level.Data[tile].MidspinType == MidspinType.Midspin ? 1 : 0);
+        int tCol = tile + (level.TileData[tile].MidspinType == MidspinType.Midspin ? 1 : 0);
 
         ARender.DrawBlankCentered(new Rectangle(pos, new Point(40)), Colors[tCol % 2]);
         if (!dead)
             ARender.DrawBlankCentered(
                 new Rectangle(
-                    (Vector2.UnitX * -100).Rotate((angle * (Twirl ? -1 : 1) - level.Data[tile].Angle) * 180).ToPoint() + pos, 
+                    (Vector2.UnitX * -100).Rotate((angle * (Twirl ? -1 : 1) - level.TileData[tile].Angle) * 180).ToPoint() + pos, 
                     new Point(40)), 
-                Colors[(tCol + 1) % 2], rotation:(angle * (Twirl ? -1 : 1) - level.Data[tile].Angle) * 180
+                Colors[(tCol + 1) % 2], rotation:(angle * (Twirl ? -1 : 1) - level.TileData[tile].Angle) * 180
             );
         Camera.TargetPosition = pos.ToVector2();
     }

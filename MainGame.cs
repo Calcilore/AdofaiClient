@@ -30,6 +30,7 @@ public class MainGame : Game {
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         TargetElapsedTime = TimeSpan.FromSeconds(1f / 60f);
+        IsFixedTimeStep = false;
     }
 
     protected override void Initialize() { 

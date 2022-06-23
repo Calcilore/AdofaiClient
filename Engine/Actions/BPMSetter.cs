@@ -14,8 +14,8 @@ public class BPMSetter : Action {
         return Texture.Bunny;
     }
 
-    public override void OnLand(Player _, Level l) {
-        Console.WriteLine($"{l.bps} -> {amount}");
-        l.bps = amount;
+    public override void OnLand(Player _, AdofaiFile l) {
+        Console.WriteLine($"{l.Bps} -> {amount}");
+        l.Bps = amount;
     }
 }

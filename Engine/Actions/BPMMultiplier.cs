@@ -14,8 +14,8 @@ public class BPMMultiplier : Action {
         return Texture.Bunny;
     }
 
-    public override void OnLand(Player _, Level l) {
-        Console.WriteLine($"Multiplier: {l.bps} * {amount} -> {l.bps * amount}");
-        l.bps *= amount;
+    public override void OnLand(Player _, AdofaiFile l) {
+        Console.WriteLine($"Multiplier: {l.Bps} * {amount} -> {l.Bps * amount}");
+        l.Bps *= amount;
     }
 }
