@@ -17,8 +17,12 @@ public class AdofaiFile {
     public float Bps;           // beats per second
     public int Version;         // Adofai file version number
     public float Offset;        // offset, in seconds
-    
-    
+
+    public string FolderPath;
+    public string FilePath;
+    public string SongPath;
+
+
     // ----------------
     //   FILE LOADING
     // ----------------
@@ -46,6 +50,12 @@ public class AdofaiFile {
     // For newer versions of ADOFAI, there is a decorations section, it lacks a comma.
     // In some other files before the decorations section, there is a trailing comma after the actions section.
     private JsonDocument LoadDocument(string path) {
+        { // Set some vars
+            FileInfo adofaiFile = new FileInfo(path);
+            FilePath = path;
+            FolderPath = adofaiFile.Directory.FullName;
+        }
+        
         bool hasErrored = false; // prevent infinite loops by only trying to solve the error once
         string file = File.ReadAllText(path);
 
@@ -79,6 +89,7 @@ public class AdofaiFile {
         Version = settings.GetProperty("version").GetInt32();
         Bps = settings.GetProperty("bpm").GetSingle() * MainGame.BpsC;
         Offset = settings.GetProperty("offset").GetSingle() / 1000f;
+        SongPath = settings.GetProperty("songFilename").GetString();
     }
     
     private float[] GetPathData(JsonElement root) {

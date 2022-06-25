@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Adofai.Audio;
 using Adofai.Misc;
 using Adofai.Render;
@@ -19,7 +20,7 @@ public class Player {
     private bool finished = true;
     private Point pos;
     private bool dead;
-    private bool auto = true;
+    private bool auto;
     
     // Event Variables
     public bool Twirl;
@@ -28,15 +29,17 @@ public class Player {
 
     public Player(AdofaiFile level) {
         this.level = level;
+        this.auto = Program.Auto;
+        
         MainGame.UpdateEvent += Update;
         MainGame.DrawEvent += Draw;
 
         lastTime = 0;
         
-        AudioManager.LoadSong("Levels/1/audio.ogg", 60);
+        AudioManager.LoadSong(Path.Join(level.FolderPath, level.SongPath), 60);
         AudioManager.Play();
         AudioManager.SetPause(true);
-        AudioManager.Offset = 1f / level.Bps;
+        AudioManager.Offset = 1f / level.Bps - level.Offset;
         AudioManager.SetVolume(80);
     }
 

@@ -15,7 +15,7 @@ public class Level : IScene {
     public void LoadScene() {
         Camera.UseTargetPosition = true;
 
-        AdofaiFile adofaiFile = new AdofaiFile("/home/adam/Desktop/classicpersuitbut.adofai");
+        AdofaiFile adofaiFile = new AdofaiFile(Program.FilePath);
 
         p = new Player(adofaiFile);
     }
