@@ -1,5 +1,4 @@
-using Microsoft.Xna.Framework.Graphics;
-using Texture = Adofai.Render.Texture;
+using Adofai.Render;
 
 namespace Adofai.Engine.Actions; 
 

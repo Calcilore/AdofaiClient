@@ -1,6 +1,4 @@
-using System;
 using Adofai.Render;
-using Microsoft.Xna.Framework;
 
 namespace Adofai.Misc;
 

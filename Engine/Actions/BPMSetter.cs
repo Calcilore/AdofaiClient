@@ -1,4 +1,3 @@
-using System;
 using Adofai.Misc;
 using Adofai.Render;
 

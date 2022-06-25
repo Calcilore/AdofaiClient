@@ -23,7 +23,7 @@ public static class AudioManager {
         Core.Initialize();
         _libVLC = new LibVLC(false);
         MediaPlayer = new MediaPlayer(_libVLC);
-        MainGame.StaticUpdateEvent += AudioManager.Update;
+        MainGame.StaticUpdateEvent += Update;
     }
 
     public static void Update() {
@@ -92,7 +92,7 @@ public static class AudioManager {
         //Logger.Info("Loading Song: " + song);
             
         AudioManager.bpm = bpm;
-        AudioManager.bps = bpm * MainGame.BpsC;
+        bps = bpm * MainGame.BpsC;
             
         Media = new Media(_libVLC, song);
         MediaPlayer.Media = Media;

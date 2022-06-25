@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Adofai.Misc;
 using CommandLine;
-using CommandLine.Text;
 
 namespace Adofai;
 
