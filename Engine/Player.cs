@@ -84,35 +84,6 @@ public class Player {
     }
 
     private void Draw() {
-        for (int i = 0; i < level.TileData.Count; i++) {
-            Tile data = level.TileData[i];
-
-            // Rectangle drawRect = new Rectangle(
-            //     data.Position.ToPoint() - new Vector2(0, 0).Rotate(data.Angle * -180).ToPoint(),
-            //     new Vector2(100, 50).Mul(data.Scale).ToPoint());
-            // ARender.DrawBlank(drawRect, data.MidspinType == MidspinType.Endspin ? Color.Aqua : new Color(0.1f, 0.1f, 0.1f, data.opacity), 
-            //     rotation:data.Angle * -180 - data.AddedRotation, origin:new Vector2(.5f, .5f)); 
-            // ARender.DrawBlank(new Rectangle(drawRect.Location, new Vector2(80, 30).Mul(data.Scale).ToPoint()),
-            //     rotation:data.Angle * -180 - data.AddedRotation, origin:new Vector2(.5f, .5f), color:new Color(0.2f, 0.2f, 0.2f, data.opacity));
-            
-            Rectangle drawRect = new Rectangle(
-                data.Position.ToPoint() - new Vector2(50, 0).Rotate(data.Angle * -180).ToPoint(),
-                new Vector2(140, 50).Mul(data.Scale).ToPoint());
-            ARender.DrawBlank(drawRect, data.MidspinType == MidspinType.Endspin ? Color.Aqua : new Color(0.1f, 0.1f, 0.1f, data.opacity), 
-                rotation:data.Angle * -180 - data.AddedRotation, origin:new Vector2(.5f, .5f)); 
-            ARender.DrawBlank(new Rectangle(drawRect.Location, new Vector2(120, 30).Mul(data.Scale).ToPoint()),
-                rotation:data.Angle * -180 - data.AddedRotation, origin:new Vector2(.5f, .5f), color:new Color(0.2f, 0.2f, 0.2f, data.opacity));
-
-            if (i != 0 && level.TileData[i-1].Actions.Count > 0) {
-                Texture icon = level.TileData[i-1].Actions[0].GetIcon();
-                if (icon != Texture.None) {
-                    ARender.Draw(icon, new Rectangle(level.TileData[i-1].Position.ToPoint().Sub(20), new Point(60)));
-                }
-            }
-
-            //ARender.DrawString(data.Timing.ToString(), Align.Left, data.Position.ToPoint(), 6, depth:.8f);
-        }
-
         // make midspins not flash colors for one frame
         int tCol = tile + (level.TileData[tile].MidspinType == MidspinType.Midspin ? 1 : 0);
 

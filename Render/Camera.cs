@@ -31,7 +31,6 @@ public static class Camera {
         UseTargetPosition = false;
         TargetPosition = Vector2.Zero;
         TargetSpeed = 5f;
-        Zoom = 1;
         RotationRadians = 0;
     }
 
