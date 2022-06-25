@@ -20,6 +20,6 @@ public static class SceneLoader {
 }
 
 public interface IScene {
-    public void LoadScene();
-    public void UnloadScene();
+    public void LoadScene() { }
+    public void UnloadScene() { }
 }

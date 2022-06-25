@@ -21,6 +21,4 @@ public class LoadingScene : IScene {
     private void Draw() {
         ARender.DrawString("Loading...", Align.Centre, Point.Zero, 1);
     }
-    
-    public void UnloadScene() { }
 }

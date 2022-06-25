@@ -13,6 +13,4 @@ public class Level : IScene {
 
         p = new Player(adofaiFile);
     }
-    
-    public void UnloadScene() { }
 }
