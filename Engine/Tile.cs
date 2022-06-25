@@ -6,9 +6,11 @@ namespace Adofai.Engine;
 
 public class Tile {
     public float Angle;
+    public float AddedRotation;
     public float Timing;
     public Vector2 Position;
-    public float Size = 100;
+    public float opacity;
+    public float Scale;
     public MidspinType MidspinType = MidspinType.None;
     public List<Action> Actions = new List<Action>();
 }

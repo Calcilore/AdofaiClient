@@ -28,6 +28,11 @@ public class AdofaiFile {
     
     // Loading Variables for Events / Actions
     public bool Twirl;
+    public Vector2 position;
+    public float spacing = 100f;
+    public float opacity = 1f;
+    public float rotation = 0f;
+    public float scale = 1f;
     
     public AdofaiFile(string fileName) {
         JsonElement doc = LoadDocument(fileName).RootElement;
@@ -161,15 +166,15 @@ public class AdofaiFile {
         // Calculate Timings
         float preAngle = 0f;
         float time = -1f;
-        Vector2 position = new Vector2(0, 0);
+        position = new Vector2(0, 0);
 
         for (int i = 0; i < angleData.Length; i++) {
             Tile t = new Tile();
+            Tile prev = TileData.Count > 0 ? TileData[i-1] : null;
             
             // If tile is endspin
             if (Math.Abs(angleData[i] - 5.55) < 0.01) {
                 // Get previous Tile (the midspin)
-                Tile prev = TileData[i-1];
                 Tile prev2 = TileData[i-2];
                 
                 // Set previous tile to be midspin and current to be endspin
@@ -210,21 +215,32 @@ public class AdofaiFile {
                 t.Timing = time;
 
                 // Position:
-                if (i != 0) position += Vector2.UnitX.RotateRadians(angleData[i] * -Util.Pi) * t.Size;
+                if (i != 0) position += Vector2.UnitX.RotateRadians(angleData[i] * -Util.Pi) * spacing;
                 t.Position = position;
                 
                 // Update previous angle:
                 preAngle = angleData[i];
             }
 
+            // will be overridden by below lines next loop, except for the ending tile
+            t.opacity = opacity;
+            t.AddedRotation = rotation;
+            t.Scale = scale;
+            
+            if (prev != null) {
+                prev.opacity = t.opacity;
+                prev.AddedRotation = t.AddedRotation;
+                prev.Scale = t.Scale;
+            }
+
+            TileData.Add(t);
+            
             // Add Events:
             foreach (JsonElement json in actions[i]) {
                 Action a = Action.jsonToAction(json, this);
                 if (a != null) t.Actions.Add(a);
                 else Logger.Warn($"Action {json.GetProperty("eventType").GetString()} failed to load, ignoring");
             }
-
-            TileData.Add(t);
         }
     }
     

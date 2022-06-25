@@ -26,6 +26,15 @@ public class Action {
                     a = new BPMMultiplier(element.GetProperty("bpmMultiplier").GetSingle());
                 break;
             }
+
+            case "PositionTrack": {
+                JsonElement offset = element.GetProperty("positionOffset");
+                a = new PositionTrack(offset[0].GetSingle(), offset[1].GetSingle(), 
+                    element.GetProperty("opacity").GetSingle(), 
+                    element.GetProperty("rotation").GetSingle(),
+                    element.GetProperty("scale").GetSingle());
+                break;
+            }
         }
 
         a?.OnLoad(l);
