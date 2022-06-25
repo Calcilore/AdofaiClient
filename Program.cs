@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Adofai.Misc;
 using CommandLine;
+using CommandLine.Text;
 
 namespace Adofai;
 
@@ -10,6 +12,9 @@ class Options {
     
     [Option('a', "auto", HelpText = "Turn on Autoplay")]
     public bool Auto { get; set; }
+
+    [Option('l', "loglevel", HelpText = "Sets the logging level of the game", Default = LogLevel.Info)]
+    public LogLevel LogLevel { get; set; }
 }
 
 public static class Program {
@@ -26,15 +31,13 @@ public static class Program {
     static void RunOptions(Options opts) {
         FilePath = opts.FileName;
         Auto = opts.Auto;
+        Logger.LogLevel = opts.LogLevel;
         
+        Logger.Info("Loading Game...");
         using (var game = new MainGame())
             game.Run();
     }
     static void HandleParseError(IEnumerable<Error> errs) {
-        foreach (Error err in errs) {
-            if (err.Tag == ErrorType.MissingValueOptionError) {
-                Console.WriteLine("Usage: ");
-            }
-        }
+        
     }
 }

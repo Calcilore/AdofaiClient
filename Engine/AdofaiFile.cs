@@ -206,8 +206,7 @@ public class AdofaiFile {
                 
                 // Timing:
                 float angleDiff = CalculateAngleDiff(preAngle, angleData[i]);
-                //Console.WriteLine(angleDiff);
-                
+
                 time += angleDiff;
                 t.Timing = time;
 
@@ -223,16 +222,10 @@ public class AdofaiFile {
             foreach (JsonElement json in actions[i]) {
                 Action a = Action.jsonToAction(json, this);
                 if (a != null) t.Actions.Add(a);
-                //else Console.WriteLine($"Error: Action {json.GetProperty("eventType").GetString()} failed to load, ignoring");
+                else Logger.Warn($"Action {json.GetProperty("eventType").GetString()} failed to load, ignoring");
             }
 
-            if (TileData.Count > 10 && TileData[i-2].MidspinType == MidspinType.Endspin) {
-                Console.WriteLine($"p:{TileData[i-4].Timing} m:{TileData[i-3].Timing} e:{TileData[i-2].Timing} n:{TileData[i-1].Timing} nn:{t.Timing}");
-            }
-            
             TileData.Add(t);
-            
-            //Console.WriteLine($"Tile Timing: {t.Timing}, Position: {t.Position}");
         }
     }
     

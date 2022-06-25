@@ -1,4 +1,5 @@
 using System;
+using Adofai.Misc;
 using Adofai.Render;
 
 namespace Adofai.Engine.Actions; 
@@ -15,7 +16,7 @@ public class BPMMultiplier : Action {
     }
 
     public override void OnLand(Player _, AdofaiFile l) {
-        Console.WriteLine($"Multiplier: {l.Bps} * {amount} -> {l.Bps * amount}");
+        Logger.Debug($"BPM Multiplier: {l.Bps} * {amount} -> {l.Bps * amount}");
         l.Bps *= amount;
     }
 }

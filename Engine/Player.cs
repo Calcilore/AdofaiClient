@@ -104,8 +104,6 @@ public class Player {
                 }
             }
 
-            //if (i == tile) Console.WriteLine(data.Angle * 180);
-
             //ARender.DrawString(data.Timing.ToString(), Align.Left, data.Position.ToPoint(), 6, depth:.8f);
         }
 

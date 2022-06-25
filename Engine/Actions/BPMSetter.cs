@@ -1,4 +1,5 @@
 using System;
+using Adofai.Misc;
 using Adofai.Render;
 
 namespace Adofai.Engine.Actions; 
@@ -15,7 +16,7 @@ public class BPMSetter : Action {
     }
 
     public override void OnLand(Player _, AdofaiFile l) {
-        Console.WriteLine($"{l.Bps} -> {amount}");
+        Logger.Debug($"BPM Setter: {l.Bps} -> {amount}");
         l.Bps = amount;
     }
 }
