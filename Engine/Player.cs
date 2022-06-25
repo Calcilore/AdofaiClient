@@ -58,7 +58,7 @@ public class Player {
         
         float timing = (nextTile.Timing - curTile.Timing);
         
-        if (auto ? angle > timing : 
+        if (auto || nextTile.MidspinType == MidspinType.Endspin ? angle > timing : 
                    Math.Abs(angle - timing) < 0.5f && Keyboard.PressedKeys.Length > 0) {
             lastTime += timing / level.Bps;
         

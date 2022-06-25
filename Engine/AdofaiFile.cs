@@ -171,6 +171,7 @@ public class AdofaiFile {
             if (Math.Abs(angleData[i] - 5.55) < 0.01) {
                 // Get previous Tile (the midspin)
                 Tile prev = TileData[i-1];
+                Tile prev2 = TileData[i-2];
                 
                 // Set previous tile to be midspin and current to be endspin
                 prev.MidspinType = MidspinType.Midspin;
@@ -181,14 +182,21 @@ public class AdofaiFile {
 
                 // Timing is the same as the previous tile
                 t.Timing = prev.Timing;
+
+                // Set time as the same as 2 tiles beforehand
+                time = prev2.Timing;
+                preAngle = prev2.Angle;
+                
+                // Calculate Angle Difference
+                float angleDiff = CalculateAngleDiff(prev2.Angle, prev.Angle);
                 
                 // account for extra loops introduced by midspin
-                if (prev.Angle > 1) {
-                    time += 1f;
+                if (angleDiff > 1) {
+                    time += 2f;
                 }
                 
                 // Set position to the same as 2 tiles beforehand (tile before midspin)
-                position = TileData[i-2].Position;
+                position = prev2.Position;
                 t.Position = position;
             }
             // if not endspin
@@ -197,26 +205,31 @@ public class AdofaiFile {
                 t.Angle = angleData[i];
                 
                 // Timing:
-                float tMul = Twirl ? -1 : 1;
-                float angleDiff = CalculateAngleDiff(preAngle * tMul, angleData[i] * tMul);
-
+                float angleDiff = CalculateAngleDiff(preAngle, angleData[i]);
+                //Console.WriteLine(angleDiff);
+                
                 time += angleDiff;
                 t.Timing = time;
 
                 // Position:
                 if (i != 0) position += Vector2.UnitX.RotateRadians(angleData[i] * -Util.Pi) * t.Size;
                 t.Position = position;
+                
+                // Update previous angle:
+                preAngle = angleData[i];
             }
-            
+
             // Add Events:
             foreach (JsonElement json in actions[i]) {
                 Action a = Action.jsonToAction(json, this);
                 if (a != null) t.Actions.Add(a);
-                else Console.WriteLine($"Error: Action {json.GetProperty("eventType").GetString()} failed to load, ignoring");
+                //else Console.WriteLine($"Error: Action {json.GetProperty("eventType").GetString()} failed to load, ignoring");
             }
 
-            // Update previous angle:
-            preAngle = angleData[i];
+            if (TileData.Count > 10 && TileData[i-2].MidspinType == MidspinType.Endspin) {
+                Console.WriteLine($"p:{TileData[i-4].Timing} m:{TileData[i-3].Timing} e:{TileData[i-2].Timing} n:{TileData[i-1].Timing} nn:{t.Timing}");
+            }
+            
             TileData.Add(t);
             
             //Console.WriteLine($"Tile Timing: {t.Timing}, Position: {t.Position}");
@@ -224,6 +237,9 @@ public class AdofaiFile {
     }
     
     private float CalculateAngleDiff(float preAngle, float angle) {
+        float tMul = Twirl ? -1 : 1;
+        preAngle *= tMul; angle *= tMul;
+        
         // previous angle + 180 degrees - current angle = angle between two points
         float angleDiff = (preAngle + 1 - angle) % 2;
         while (angleDiff <= 0) angleDiff += 2; // Modulo Doesnt Work Fully
