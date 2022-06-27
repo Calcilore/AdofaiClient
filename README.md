@@ -33,3 +33,17 @@ Your custom levels are located in "&lt;Your Steam Folder&gt;/steamapps/workshop/
 On Windows its located at: C:\Program Files (x86)\Steam <br>
 On Linux its located at: ~/.local/share/Steam <br>
 On Linux using flatpak: ~/.var/app/com.valvesoftware.Steam/data/Steam/
+
+# Current Compatibility Status
+
+## Known issues
+ - Zoom is incapable of going below 85%
+ - On older version of ADOFAI that use a string for the angledata, not all the angles are supported
+ - There is no countdown for the level to start
+
+## Things currently implemented:
+ - Song Loading with offset
+ - BPM Changing
+ - Twirls
+ - Camera Controls
+ - Position Track
