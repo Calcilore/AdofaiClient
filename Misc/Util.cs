@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using Microsoft.Xna.Framework;
 
 namespace Adofai.Misc; 
@@ -21,6 +22,10 @@ public static class Util {
             MathHelper.Lerp(v.X, v2.X, by),
             MathHelper.Lerp(v.Y, v2.Y, by)
         );
+    }
+
+    public static Vector2 GetVector2FromJson(JsonElement json) {
+            return new Vector2(json[0].GetSingle(), json[1].GetSingle());
     }
     
     // Adding and subtracting by non-vectors (sadly there are no operator overloading extension methods in C#)

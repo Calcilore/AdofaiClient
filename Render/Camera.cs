@@ -13,9 +13,6 @@ public static class Camera {
     }
     
     public static Vector2 Position { get; set; }
-    public static Vector2 TargetPosition { get; set; }
-    public static float TargetSpeed { get; set; }
-    public static bool UseTargetPosition { get; set; }
     public static Rectangle Bounds { get; private set; }
     public static Rectangle VisibleArea { get; private set; }
     public static Matrix Transform { get; private set; }
@@ -28,9 +25,6 @@ public static class Camera {
     public static void Reset() {
         Zoom = 1f;
         Position = Vector2.Zero;
-        UseTargetPosition = false;
-        TargetPosition = Vector2.Zero;
-        TargetSpeed = 5f;
         RotationRadians = 0;
     }
 
@@ -60,9 +54,6 @@ public static class Camera {
     }
 
     public static void UpdateCamera(Viewport bounds) {
-        if (UseTargetPosition)
-            Position = Util.Lerp(Position, TargetPosition, TargetSpeed * GTime.Delta);
-        
         Bounds = bounds.Bounds;
         UpdateMatrix();
     }

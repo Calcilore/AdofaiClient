@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Adofai.Misc;
+using Adofai.Render;
 using Microsoft.Xna.Framework;
 using Action = Adofai.Engine.Actions.Action;
 
@@ -21,6 +22,14 @@ public class AdofaiFile {
     public string FilePath;
     public string SongPath;
 
+    // --------------------
+    //   STATIC FUNCTIONS
+    // --------------------
+
+    public static float ConvertFromAdofaiZoom(float zoom) {
+        // TODO: Made zoom capable of going above 1.9
+        return MathHelper.Min(162f / zoom, 1.9f); // Simplified from 1f / (zoom / 100f) * 1.62f
+    }
 
     // ----------------
     //   FILE LOADING
@@ -30,15 +39,25 @@ public class AdofaiFile {
     public bool Twirl;
     public Vector2 position;
     public float spacing = 100f;
+    public const float staticSpacing = 100f;
     public float opacity = 1f;
     public float rotation = 0f;
     public float scale = 1f;
     
+    // Loading Variable for Player
+    public Vector2 CameraStartPos;
+    public Vector2 CameraTarget;
+    public Vector2 CameraOffset;
+    public FollowType CameraFollowType;
+    public float CameraSpeed;
+    public float CameraTimer;
+    
     public AdofaiFile(string fileName) {
         JsonElement doc = LoadDocument(fileName).RootElement;
+        JsonElement settings = doc.GetProperty("settings");
 
         // Get Settings
-        GetSettings(doc);
+        GetSettings(settings);
         
         // Get Angle Data
         float[] angleData = GetPathData(doc);
@@ -49,6 +68,9 @@ public class AdofaiFile {
         // Get Tile Data
         TileData = new List<Tile>();
         GetTileData(angleData, actions);
+        
+        // Get Camera Data
+        GetCameraData(settings);
     }
 
     // For newer versions of ADOFAI, there is a decorations section, it lacks a comma.
@@ -87,9 +109,7 @@ public class AdofaiFile {
         }
     }
 
-    private void GetSettings(JsonElement root) {
-        JsonElement settings = root.GetProperty("settings");
-
+    private void GetSettings(JsonElement settings) {
         Version = settings.GetProperty("version").GetInt32();
         Bps = settings.GetProperty("bpm").GetSingle() * MainGame.BpsC;
         Offset = settings.GetProperty("offset").GetSingle() / 1000f;
@@ -253,4 +273,29 @@ public class AdofaiFile {
         while (angleDiff <= 0) angleDiff += 2; // Modulo Doesnt Work Fully
         return angleDiff;
     }
+
+    private void GetCameraData(JsonElement settings) {
+        float zoom = settings.GetProperty("zoom").GetSingle();
+        Camera.Zoom = ConvertFromAdofaiZoom(zoom);
+
+        Camera.RotationDegrees = settings.GetProperty("rotation").GetSingle();
+        
+        CameraStartPos = Vector2.Zero;
+        CameraTarget = Vector2.Zero;
+        CameraSpeed = 1f / Bps * 1.5f;
+        
+        CameraOffset = Util.GetVector2FromJson(settings.GetProperty("position")) * staticSpacing;
+
+        switch (settings.GetProperty("relativeTo").GetString()) {
+            case "Player":
+                CameraFollowType = FollowType.Position;
+                break;
+
+            case "Tile":
+            case "Global":
+                CameraFollowType = FollowType.None;
+                CameraTarget = Vector2.Zero;
+                break;
+        }
+    } 
 }

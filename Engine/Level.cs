@@ -10,8 +10,6 @@ public class Level : IScene {
 
     public void LoadScene() {
         MainGame.DrawEvent += Draw;
-        
-        Camera.UseTargetPosition = true;
 
         level = new AdofaiFile(Program.FilePath);
 
@@ -25,7 +23,7 @@ public class Level : IScene {
             
             // Outline
             Rectangle drawRect = new Rectangle(data.Position.ToPoint(), new Vector2(75, 50).Mul(data.Scale).ToPoint());
-            Color color = new Color(0.2f, 0.2f, 0.2f, data.opacity);
+            Color color = new Color(0.2f, 0.2f, 0.2f) * data.opacity;
             
             ARender.DrawBlankCentered(drawRect, color, rotation:data.Angle * -180 - data.AddedRotation, 
                 origin: new Vector2(0.25f,0));
@@ -35,7 +33,7 @@ public class Level : IScene {
             
             // Inner Portion
             drawRect = new Rectangle(data.Position.ToPoint(), new Vector2(70, 40).Mul(data.Scale).ToPoint());
-            color = new Color(0.25f, 0.25f, 0.25f, data.opacity);
+            color = new Color(0.25f, 0.25f, 0.25f) * data.opacity;
             
             ARender.DrawBlankCentered(drawRect, color, rotation:data.Angle * -180 - data.AddedRotation, 
                 origin: new Vector2(0.25f,0));

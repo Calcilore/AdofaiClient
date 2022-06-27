@@ -1,5 +1,7 @@
 using System.Text.Json;
+using Adofai.Misc;
 using Adofai.Render;
+using Microsoft.Xna.Framework;
 
 namespace Adofai.Engine.Actions; 
 
@@ -35,9 +37,32 @@ public class Action {
                     element.GetProperty("scale").GetSingle());
                 break;
             }
+
+            case "MoveCamera": {
+                float duration = element.GetProperty("duration").GetSingle();
+                Vector2? offset = TryGetVector2(element, "position", null);
+                string relativeTo = TryGetString(element, "relativeTo", null);
+                float? rotation = TryGetFloat(element, "rotation", null);
+                float? zoom = TryGetFloat(element, "zoom", null);
+                
+                a = new MoveCamera(duration, offset, relativeTo, rotation, zoom);
+                break;
+            }
         }
 
         a?.OnLoad(l);
         return a;
+    }
+    
+    private static string TryGetString(JsonElement element, string path, string def) {
+        return element.TryGetProperty(path, out element) ? element.GetString() : def;
+    }
+    
+    private static float? TryGetFloat(JsonElement element, string path, float? def) {
+        return element.TryGetProperty(path, out element) ? element.GetSingle() : def;
+    }
+    
+    private static Vector2? TryGetVector2(JsonElement element, string path, Vector2? def) {
+        return element.TryGetProperty(path, out element) ? Util.GetVector2FromJson(element) : def;
     }
 }
