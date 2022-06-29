@@ -11,11 +11,18 @@ public static class SceneLoader {
         MainGame.DrawEvent = null;
         MainGame.UpdateEvent = null;
         MainGame.DrawHUDEvent = null;
-        Camera.Reset();
-        
+
         // Load new scene
         currentScene = scene;
+        
+        // Finish loading scene next frame to make sure that things running this frame wont interfere with the new scene
+        MainGame.UpdateEvent += AddSubscribers;
+    }
+    
+    private static void AddSubscribers() {
+        Camera.Reset();
         currentScene.LoadScene();
+        MainGame.UpdateEvent -= AddSubscribers;
     }
 }
 
