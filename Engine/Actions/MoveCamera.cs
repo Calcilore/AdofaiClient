@@ -9,6 +9,7 @@ public class MoveCamera : Action {
     
     private float duration;
     private string relativeTo;
+    private Ease ease;
 
     private Vector2? offset;
     private float? rotation;
@@ -20,7 +21,8 @@ public class MoveCamera : Action {
     
     private float elapsed;
     
-    public MoveCamera(float duration, Vector2? offset, string relativeTo, float? rotation, float? zoom) {
+    public MoveCamera(Ease ease, float duration, Vector2? offset, string relativeTo, float? rotation, float? zoom) {
+        this.ease = ease;
         this.duration = duration;
         this.offset = offset;
         this.relativeTo = relativeTo;
@@ -99,14 +101,14 @@ public class MoveCamera : Action {
 
     // All Possible System.InvalidOperationExceptions are not possible because they wouldn't be subscribed if they were
     private void OffsetUpdate() {
-        p.CameraOffset = Vector2.Lerp(originalOffset, offset.Value, elapsed / duration);
+        p.CameraOffset = Easings.DoEase(ease, originalOffset, offset.Value, elapsed / duration);
     }
     
     private void RotationUpdate() {
-        Camera.RotationDegrees = MathHelper.Lerp(originalRotation, rotation.Value, elapsed / duration);
+        Camera.RotationDegrees = Easings.DoEase(ease, originalRotation, rotation.Value, elapsed / duration);
     }
 
     private void ZoomUpdate() {
-        Camera.Zoom = MathHelper.Lerp(originalZoom, zoom.Value, elapsed / duration);
+        Camera.Zoom = Easings.DoEase(ease, originalZoom, zoom.Value, elapsed / duration);
     }
 }

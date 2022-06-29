@@ -1,3 +1,4 @@
+using System;
 using Adofai.Misc;
 using Adofai.Render;
 using Microsoft.Xna.Framework;
@@ -8,12 +9,35 @@ public class Level : IScene {
     private Player p;
     private AdofaiFile level;
 
+    private string chars = "";
+    private float lastTime;
+
     public void LoadScene() {
         MainGame.DrawEvent += Draw;
+        MainGame.UpdateEvent += Update;
 
         level = new AdofaiFile(Program.FilePath);
 
         p = new Player(level);
+
+        lastTime = GTime.Total;
+    }
+
+    private void Update() {
+        if (Keyboard.PressedKeys.Length > 0) {
+            if (GTime.Total - lastTime > 0.3f) {
+                chars = Keyboard.PressedKeys[0].ToString();
+            }
+            else {
+                chars += Keyboard.PressedKeys[0].ToString();
+            }
+
+            if (chars == "EASINGS") {
+                SceneLoader.LoadScene(new EasingTest());
+            }
+
+            lastTime = GTime.Total;
+        }
     }
 
     private void Draw() {

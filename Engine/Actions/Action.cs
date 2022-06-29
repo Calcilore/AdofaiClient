@@ -44,8 +44,9 @@ public class Action {
                 string relativeTo = TryGetString(element, "relativeTo", null);
                 float? rotation = TryGetFloat(element, "rotation", null);
                 float? zoom = TryGetFloat(element, "zoom", null);
+                Ease ease = Easings.AdofaiEasingToEnum(element.GetProperty("ease").GetString());
                 
-                a = new MoveCamera(duration, offset, relativeTo, rotation, zoom);
+                a = new MoveCamera(ease, duration, offset, relativeTo, rotation, zoom);
                 break;
             }
         }
