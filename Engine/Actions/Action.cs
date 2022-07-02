@@ -30,11 +30,11 @@ public class Action {
             }
 
             case "PositionTrack": {
-                JsonElement offset = element.GetProperty("positionOffset");
-                a = new PositionTrack(offset[0].GetSingle(), offset[1].GetSingle(), 
-                    element.GetProperty("opacity").GetSingle(), 
-                    element.GetProperty("rotation").GetSingle(),
-                    element.GetProperty("scale").GetSingle());
+                Vector2 offset = TryGetVector2(element, "positionOffset", Vector2.Zero);
+                a = new PositionTrack(offset.X, offset.Y,
+                    TryGetFloat(element, "opacity", 100f),
+                    TryGetFloat(element, "rotation", 0f),
+                    TryGetFloat(element, "scale", 100f));
                 break;
             }
 
@@ -63,7 +63,15 @@ public class Action {
         return element.TryGetProperty(path, out element) ? element.GetSingle() : def;
     }
     
+    private static float TryGetFloat(JsonElement element, string path, float def) {
+        return element.TryGetProperty(path, out element) ? element.GetSingle() : def;
+    }
+    
     private static Vector2? TryGetVector2(JsonElement element, string path, Vector2? def) {
+        return element.TryGetProperty(path, out element) ? Util.GetVector2FromJson(element) : def;
+    }
+
+    private static Vector2 TryGetVector2(JsonElement element, string path, Vector2 def) {
         return element.TryGetProperty(path, out element) ? Util.GetVector2FromJson(element) : def;
     }
 }
