@@ -57,7 +57,6 @@ public class Player {
         AudioManager.Play();
         AudioManager.SetPause(true);
         AudioManager.Offset = 1f / level.Bps - level.Offset;
-        AudioManager.SetVolume(0);
     }
 
     private void Update() {
