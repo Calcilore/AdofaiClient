@@ -1,4 +1,5 @@
 using Adofai.Render;
+using Microsoft.Xna.Framework;
 
 namespace Adofai.Misc;
 
@@ -21,6 +22,7 @@ public static class SceneLoader {
     
     private static void AddSubscribers() {
         Camera.Reset();
+        MainGame.BackgroundColor = Color.CornflowerBlue;
         currentScene.LoadScene();
         MainGame.UpdateEvent -= AddSubscribers;
     }

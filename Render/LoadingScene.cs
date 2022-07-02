@@ -15,7 +15,13 @@ public class LoadingScene : IScene {
         AudioManager.Init();
         Assets.Load();
 
-        SceneLoader.LoadScene(new Level());
+        if (Program.FilePath == null) {
+            Logger.Info("No file specified");
+            SceneLoader.LoadScene(new LevelChooserScene());
+        } else {
+            Logger.Info("Loading file: " + Program.FilePath);
+            SceneLoader.LoadScene(new Level());
+        }
     }
 
     private void Draw() {

@@ -19,6 +19,8 @@ public class MainGame : Game {
     public static GraphicsDeviceManager Graphics;
     public static SpriteBatch SpriteBatch;
 
+    public static Color BackgroundColor;
+    
     private FPSCounter fpsCounter;
 
     public MainGame() {
@@ -64,7 +66,7 @@ public class MainGame : Game {
     }
 
     protected override void Draw(GameTime gameTime) {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(BackgroundColor);
 
         ARender.DrawPre();
         SpriteBatch.Begin(sortMode:SpriteSortMode.FrontToBack, transformMatrix:Camera.Transform);

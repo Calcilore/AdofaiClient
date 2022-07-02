@@ -28,6 +28,7 @@
         <PackageReference Include="LibVLCSharp" Version="3.6.6" />
         <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
         <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+        <PackageReference Include="NativeFileDialogSharp" Version="0.5.0" />
         <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.17.4" />
     </ItemGroup>
 </Project>

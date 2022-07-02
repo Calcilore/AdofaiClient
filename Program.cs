@@ -6,7 +6,7 @@ using CommandLine;
 namespace Adofai;
 
 class Options {
-    [Value(0, MetaName = "File", HelpText = "File to be loaded", Required = true)] 
+    [Value(0, MetaName = "File", HelpText = "File to be loaded")] 
     public string FileName { get; set; }
     
     [Option('a', "auto", HelpText = "Turn on Autoplay")]
