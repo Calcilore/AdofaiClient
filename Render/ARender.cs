@@ -1,3 +1,4 @@
+using Adofai.Misc;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -5,7 +6,7 @@ namespace Adofai.Render;
 
 public static class ARender {
     public const float DefaultDrawDepth = 0.5f;
-    public const float DepthAddAmount = 0.0001f;
+    public const float DepthAddAmount = 0.0000001f;
     
     public static Texture2D Blank;
     private static float depthAdd = 0f;
