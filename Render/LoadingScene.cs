@@ -13,6 +13,7 @@ public class LoadingScene : IScene {
 
     private void Update() {
         AudioManager.Init();
+        VolumeManager.Init();
         Assets.Load();
 
         if (Program.FilePath == null) {
