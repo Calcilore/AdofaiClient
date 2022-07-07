@@ -9,15 +9,13 @@ This is a simple client for A Dance of Fire and Ice, designed to have better per
 
 # How do I install this?
 
-1. Go to the Releases Page ([https://github.com/Calcilore/AdofaiClient/releases/latest]())
+1. Go to the Releases Page ([https://github.com/Calcilore/AdofaiClient/releases/latest](https://github.com/Calcilore/AdofaiClient/releases/latest))
 2. Download the latest version for your computer 
 3. Extract and run
 
 # How do I use this?
 
-## Opening the file just opens and immediately closes the window
-You run the file with the command line arguments of the file you want to open
-
+## I want to use command line arguments
 for example: <br>
 Adofai.exe C:\Users\Username\Downloads\level.adofai
 
