@@ -98,3 +98,9 @@
 /processorParam:TextureFormat=Color
 /build:Events/Bunny.png
 
+#begin hitsound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:hitsound.wav
+

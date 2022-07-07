@@ -23,6 +23,9 @@ public class Player {
     private bool dead;
     private bool auto;
     
+    // Hitsounds
+    private int hitsoundTile = 1;
+
     // Event Variables
     public bool Twirl;
     
@@ -80,15 +83,21 @@ public class Player {
 
         if (finished) return;
 
+        // Hitsounds
+        if (!dead && AudioManager.GetFrameTimeOffset() > level.TileData[hitsoundTile].TimingSeconds) {
+            hitsoundTile++;
+            ASound.Play(Sound.HitSound);
+        }
+        
         // The player logic
         Tile nextTile = level.TileData[tile + 1];
         
-        float timing = (nextTile.Timing - curTile.Timing);
-        
+        float timing = (nextTile.TimingAngle - curTile.TimingAngle);
+
         if (auto || nextTile.MidspinType == MidspinType.Endspin ? angle > timing : 
-            Math.Abs(angle - timing) < 0.5f && Keyboard.PressedKeys.Length > 0) {
+                Math.Abs(angle - timing) < 0.5f && Keyboard.PressedKeys.Length > 0) {
             lastTime += timing / level.Bps;
-        
+
             tile++;
             
             foreach (Action action in nextTile.Actions) {

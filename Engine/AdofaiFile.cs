@@ -43,6 +43,7 @@ public class AdofaiFile {
     public float opacity = 1f;
     public float rotation = 0f;
     public float scale = 1f;
+    public float loadBps;
     
     // Loading Variable for Player
     public Vector2 CameraStartPos;
@@ -112,6 +113,7 @@ public class AdofaiFile {
     private void GetSettings(JsonElement settings) {
         Version = settings.GetProperty("version").GetInt32();
         Bps = settings.GetProperty("bpm").GetSingle() * MainGame.BpsC;
+        loadBps = Bps;
         Offset = settings.GetProperty("offset").GetSingle() / 1000f;
         SongPath = settings.GetProperty("songFilename").GetString();
     }
@@ -164,6 +166,7 @@ public class AdofaiFile {
             case '!': return 5.55f; // Midspin (999 / 180)
         }
 
+        Logger.Error($"Path Character {path} is unknown!");
         return -1;
     }
     
@@ -185,7 +188,8 @@ public class AdofaiFile {
     private void GetTileData(float[] angleData, List<JsonElement>[] actions) { 
         // Calculate Timings
         float preAngle = 0f;
-        float time = -1f;
+        float timeAngle = -1f;
+        float timeSeconds = -1f / loadBps;
         position = new Vector2(0, 0);
 
         for (int i = 0; i < angleData.Length; i++) {
@@ -205,10 +209,12 @@ public class AdofaiFile {
                 t.Angle = (prev.Angle + 1) % 2;
 
                 // Timing is the same as the previous tile
-                t.Timing = prev.Timing;
+                t.TimingAngle = prev.TimingAngle;
+                t.TimingSeconds = prev.TimingSeconds;
 
                 // Set time as the same as 2 tiles beforehand
-                time = prev2.Timing;
+                timeAngle = prev2.TimingAngle;
+                timeSeconds = prev2.TimingSeconds;
                 preAngle = prev2.Angle;
                 
                 // Calculate Angle Difference
@@ -216,7 +222,7 @@ public class AdofaiFile {
                 
                 // account for extra loops introduced by midspin
                 if (angleDiff > 1) {
-                    time += 2f;
+                    timeAngle += 2f;
                 }
                 
                 // Set position to the same as 2 tiles beforehand (tile before midspin)
@@ -231,8 +237,11 @@ public class AdofaiFile {
                 // Timing:
                 float angleDiff = CalculateAngleDiff(preAngle, angleData[i]);
 
-                time += angleDiff;
-                t.Timing = time;
+                timeAngle += angleDiff;
+                t.TimingAngle = timeAngle;
+                
+                timeSeconds += angleDiff / loadBps;
+                t.TimingSeconds = timeSeconds;
 
                 // Position:
                 if (i != 0) position += Vector2.UnitX.RotateRadians(angleData[i] * -Util.Pi) * spacing;

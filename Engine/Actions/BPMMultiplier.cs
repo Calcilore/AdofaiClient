@@ -14,8 +14,16 @@ public class BPMMultiplier : Action {
         return Texture.Bunny;
     }
 
+    private void DoThing(ref float var) {
+        Logger.Debug($"BPM Multiplier: {var} * {amount} -> {var * amount}");
+        var *= amount;
+    }
+
     public override void OnLand(Player _, AdofaiFile l) {
-        Logger.Debug($"BPM Multiplier: {l.Bps} * {amount} -> {l.Bps * amount}");
-        l.Bps *= amount;
+        DoThing(ref l.Bps);
+    }
+
+    public override void OnLoad(AdofaiFile l) {
+        DoThing(ref l.loadBps);
     }
 }

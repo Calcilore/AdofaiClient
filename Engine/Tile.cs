@@ -6,8 +6,9 @@ namespace Adofai.Engine;
 
 public class Tile {
     public float Angle;
-    public float AddedRotation;
-    public float Timing;
+    public float AddedRotation; // Rotation that only changes what the tile looks like, not gameplay
+    public float TimingAngle;   // The total angle the player must spin to reach this tile
+    public float TimingSeconds; // The amount of seconds to reach this tile
     public Vector2 Position;
     public float opacity;
     public float Scale;
