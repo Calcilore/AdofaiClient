@@ -36,6 +36,7 @@ public static class Assets {
         LoadTexture("Events/Twirl1");
         LoadTexture("Events/Twirl2");
         LoadTexture("Events/Bunny");
+        LoadTexture("Events/Snail");
 
         i = 0;
         sounds = new SoundEffect[(int)Sound.Count - 1];
@@ -48,6 +49,7 @@ public enum Texture {
     Twirl1,
     Twirl2,
     Bunny,
+    Snail,
     Count // Texture count, includes None.
 }
 

@@ -30,7 +30,7 @@ public class MoveCamera : Action {
         this.zoom = zoom;
     }
 
-    public override void OnLoad(AdofaiFile l) {
+    public override void OnLoad(AdofaiFile l, int _) {
         duration /= l.Bps;
     }
 

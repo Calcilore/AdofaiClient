@@ -7,12 +7,12 @@ namespace Adofai.Engine.Actions;
 
 public class Action {
     public virtual void OnLand(Player p, AdofaiFile l) {}
-    public virtual void OnLoad(AdofaiFile l) {}
+    public virtual void OnLoad(AdofaiFile l, int index) {}
     
     public virtual Texture GetIcon() { return Texture.None; }
     
 
-    public static Action jsonToAction(JsonElement element, AdofaiFile l) {
+    public static Action jsonToAction(JsonElement element, AdofaiFile l, int index) {
         Action a = null;
         
         switch (element.GetProperty("eventType").GetString()) {
@@ -23,9 +23,10 @@ public class Action {
 
             case "SetSpeed": {
                 if (element.GetProperty("speedType").GetString() == "Bpm")
-                    a = new BPMSetter(element.GetProperty("beatsPerMinute").GetSingle() * MainGame.BpsC);
-                else
-                    a = new BPMMultiplier(element.GetProperty("bpmMultiplier").GetSingle());
+                    a = new BPMSetter(element.GetProperty("beatsPerMinute").GetSingle() * MainGame.BpsC, true);
+                else 
+                    a = new BPMSetter(element.GetProperty("bpmMultiplier").GetSingle(), false);
+                
                 break;
             }
 
@@ -51,7 +52,7 @@ public class Action {
             }
         }
 
-        a?.OnLoad(l);
+        a?.OnLoad(l, index);
         return a;
     }
     

@@ -266,7 +266,7 @@ public class AdofaiFile {
             
             // Add Events:
             foreach (JsonElement json in actions[i]) {
-                Action a = Action.jsonToAction(json, this);
+                Action a = Action.jsonToAction(json, this, i);
                 if (a != null) t.Actions.Add(a);
                 else Logger.Warn($"Action {json.GetProperty("eventType").GetString()} failed to load, ignoring");
             }

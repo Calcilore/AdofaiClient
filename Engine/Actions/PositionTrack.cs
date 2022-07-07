@@ -15,7 +15,7 @@ public class PositionTrack : Action {
         this.scale = scale / 100f;
     }
     
-    public override void OnLoad(AdofaiFile l) {
+    public override void OnLoad(AdofaiFile l, int _) {
         l.position += offset * l.spacing;
         l.TileData[^1].Position += offset * l.spacing;
         l.opacity = opacity;

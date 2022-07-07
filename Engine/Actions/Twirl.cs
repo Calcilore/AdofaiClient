@@ -3,7 +3,7 @@ using Adofai.Render;
 namespace Adofai.Engine.Actions; 
 
 public class Twirl : Action {
-    public override void OnLoad(AdofaiFile l) {
+    public override void OnLoad(AdofaiFile l, int _) {
         l.Twirl = !l.Twirl;
     }
 
