@@ -14,7 +14,7 @@ public class Player {
     private static readonly Color[] Colors = new[] { Color.Red, Color.Blue};
     
     private AdofaiFile level;
-
+    
     private float angle;
     private int tile;
     private bool finished = true;
@@ -32,6 +32,7 @@ public class Player {
 
     // Event Variables
     public bool Twirl;
+    public float Bps;
     
     // Camera
     public Vector2 CameraStartPos; // Starting position for the Camera
@@ -53,27 +54,32 @@ public class Player {
         CameraOffset = level.CameraOffset;
         CameraFollowType = level.CameraFollowType;
         CameraSpeed = level.CameraSpeed;
-        CameraTimer = level.CameraTimer;
+        CameraTimer = 0;
+        Bps = level.Bps;
 
         MainGame.UpdateEvent += Update;
         MainGame.DrawEvent += Draw;
 
         lastTime = 0;
-        
-        AudioManager.LoadSong(Path.Join(level.FolderPath, level.SongPath), 60);
-        AudioManager.Play();
-        AudioManager.SetPause(true);
-        AudioManager.Offset = 1f / level.Bps - level.Offset;
     }
 
     private void Update() {
         if (Keyboard.IsKeyPressed(Keys.Space)) {
+            if (dead) {
+                MainGame.UpdateEvent -= Update;
+                MainGame.DrawEvent -= Draw;
+                AudioManager.Seek(0);
+                AudioManager.SetPause(true);
+                new Player(level);
+                return;
+            }
+            
             finished = false;
             AudioManager.SetPause(false);
         }
         
         // Camera
-        float actualCamSpeed = CameraSpeed / level.Bps;
+        float actualCamSpeed = CameraSpeed / Bps;
         
         if (CameraTimer < actualCamSpeed) {
             Camera.Position = Vector2.Lerp(CameraStartPos, CameraTarget + CameraOffset, CameraTimer / actualCamSpeed);
@@ -85,7 +91,7 @@ public class Player {
         }
 
         Tile curTile = level.TileData[tile];
-        angle = (AudioManager.GetFrameTimeOffset() - lastTime) * level.Bps;
+        angle = (AudioManager.GetFrameTimeOffset() - lastTime) * Bps;
 
         if (finished) return;
 
@@ -103,11 +109,11 @@ public class Player {
         bool pressedAButton = Keyboard.PressedKeys.Length > 0;
         
         // Calculate Rating
-        Rating rating = RatingText.GetRatingAndCreateRatingText(timingDiff, pressedAButton, level.Bps, out RatingText rt);
+        Rating rating = RatingText.GetRatingAndCreateRatingText(timingDiff, pressedAButton, Bps, out RatingText rt);
         
         if (auto || nextTile.MidspinType == MidspinType.Endspin ? angle > timing : 
                 rating < Rating.EarlyMiss && pressedAButton) {
-            lastTime += timing / level.Bps;
+            lastTime += timing / Bps;
 
             tile++;
             

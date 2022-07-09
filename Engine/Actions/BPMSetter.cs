@@ -27,8 +27,8 @@ public class BPMSetter : Action {
         return var * amount;
     }
 
-    public override void OnLand(Player _, AdofaiFile l) {
-        l.Bps = DoThing(l.Bps);
+    public override void OnLand(Player p, AdofaiFile _) {
+        p.Bps = DoThing(p.Bps);
     }
 
     public override void OnLoad(AdofaiFile l, int index) {

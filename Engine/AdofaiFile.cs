@@ -13,14 +13,14 @@ namespace Adofai.Engine;
 /// A Class for managing loading .ADOFAI Files
 /// </summary>
 public class AdofaiFile {
-    public List<Tile> TileData; // The Tile Data
-    public float Bps;           // beats per second
-    public int Version;         // Adofai file version number
-    public float Offset;        // offset, in seconds
+    public List<Tile> TileData { get; }              // The Tile Data
+    public float Bps { get; private set; }           // beats per second
+    public int Version { get; private set; }         // Adofai file version number
+    public float Offset { get; private set; }        // offset, in seconds
 
-    public string FolderPath;
-    public string FilePath;
-    public string SongPath;
+    public string FolderPath { get; private set; }   // The path to the folder containing the .ADOFAI file
+    public string FilePath { get; private set; }     // The path to the .ADOFAI file
+    public string SongPath { get; private set; }     // The path to the song audio file
 
     // --------------------
     //   STATIC FUNCTIONS
@@ -46,13 +46,12 @@ public class AdofaiFile {
     public float loadBps;
     
     // Loading Variable for Player
-    public Vector2 CameraStartPos;
-    public Vector2 CameraTarget;
-    public Vector2 CameraOffset;
-    public FollowType CameraFollowType;
-    public float CameraSpeed;
-    public float CameraTimer;
-    
+    public Vector2 CameraStartPos { get; private set; }
+    public Vector2 CameraTarget { get; private set; }
+    public Vector2 CameraOffset { get; private set; }
+    public FollowType CameraFollowType { get; private set; }
+    public float CameraSpeed { get; private set; }
+
     public AdofaiFile(string fileName) {
         JsonElement doc = LoadDocument(fileName).RootElement;
         JsonElement settings = doc.GetProperty("settings");
