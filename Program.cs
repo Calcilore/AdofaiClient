@@ -14,11 +14,15 @@ class Options {
 
     [Option('l', "loglevel", HelpText = "Sets the logging level of the game", Default = LogLevel.Info)]
     public LogLevel LogLevel { get; set; }
+    
+    [Option('o', "offset", HelpText = "Sets the music offset in game", Default = 0f)]
+    public float Offset { get; set; }
 }
 
 public static class Program {
     public static string FilePath;
     public static bool Auto;
+    public static float OffsetOption;
     
     [STAThread]
     static void Main(string[] args) {
@@ -30,6 +34,7 @@ public static class Program {
     static void RunOptions(Options opts) {
         FilePath = opts.FileName;
         Auto = opts.Auto;
+        OffsetOption = opts.Offset / 1000f;
         Logger.LogLevel = opts.LogLevel;
         
         Logger.Info("Loading Game...");

@@ -22,7 +22,7 @@ public class Level : IScene {
         AudioManager.LoadSong(Path.Join(level.FolderPath, level.SongPath), 60);
         AudioManager.Play();
         AudioManager.SetPause(true);
-        AudioManager.Offset = 1f / level.Bps - level.Offset;
+        AudioManager.Offset = 1f / level.Bps - level.Offset + Program.OffsetOption;
         
         new Player(level);
 
