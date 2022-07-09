@@ -12,27 +12,29 @@ public class Action {
     public virtual Texture GetIcon() { return Texture.None; }
     
 
-    public static Action jsonToAction(JsonElement element, AdofaiFile l, int index) {
-        Action a = null;
+    public static bool jsonToAction(JsonElement element, AdofaiFile l, int index, out Action action) {
+        bool loadedSuccesfully = true;
+        action = null;
         
         switch (element.GetProperty("eventType").GetString()) {
             case "Twirl": {
-                a = new Twirl();
+                action = new Twirl();
                 break;
             }
 
             case "SetSpeed": {
                 if (element.GetProperty("speedType").GetString() == "Bpm")
-                    a = new BPMSetter(element.GetProperty("beatsPerMinute").GetSingle() * MainGame.BpsC, true);
+                    action = new BPMSetter(element.GetProperty("beatsPerMinute").GetSingle() * MainGame.BpsC, true);
                 else 
-                    a = new BPMSetter(element.GetProperty("bpmMultiplier").GetSingle(), false);
-                
+                    action = new BPMSetter(element.GetProperty("bpmMultiplier").GetSingle(), false);
                 break;
             }
 
             case "PositionTrack": {
+                if (TryGetString(element, "editorOnly", "") == "Enabled") return true;
+                
                 Vector2 offset = TryGetVector2(element, "positionOffset", Vector2.Zero);
-                a = new PositionTrack(offset.X, offset.Y,
+                action = new PositionTrack(offset.X, offset.Y,
                     TryGetFloat(element, "opacity", 100f),
                     TryGetFloat(element, "rotation", 0f),
                     TryGetFloat(element, "scale", 100f));
@@ -47,13 +49,17 @@ public class Action {
                 float? zoom = TryGetFloat(element, "zoom", null);
                 Ease ease = Easings.AdofaiEasingToEnum(element.GetProperty("ease").GetString());
                 
-                a = new MoveCamera(ease, duration, offset, relativeTo, rotation, zoom);
+                action = new MoveCamera(ease, duration, offset, relativeTo, rotation, zoom);
                 break;
             }
+            
+            default:
+                loadedSuccesfully = false;
+                break;
         }
 
-        a?.OnLoad(l, index);
-        return a;
+        action?.OnLoad(l, index);
+        return loadedSuccesfully;
     }
     
     private static string TryGetString(JsonElement element, string path, string def) {
