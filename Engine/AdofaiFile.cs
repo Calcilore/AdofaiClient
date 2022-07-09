@@ -291,7 +291,7 @@ public class AdofaiFile {
         
         CameraStartPos = Vector2.Zero;
         CameraTarget = Vector2.Zero;
-        CameraSpeed = 1f / Bps * 1.5f;
+        CameraSpeed = 1.5f;
         
         CameraOffset = Util.GetVector2FromJson(settings.GetProperty("position")) * staticSpacing;
 

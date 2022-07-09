@@ -20,8 +20,12 @@ public class Player {
     private bool finished = true;
     private Vector2 pos;
     private Vector2 lastPos;
-    private bool dead;
     private bool auto;
+    
+    // Death
+    private bool dead;
+    private bool dying;
+    private float timingDiff;
     
     // Hitsounds
     private int hitsoundTile = 1;
@@ -69,11 +73,13 @@ public class Player {
         }
         
         // Camera
-        if (CameraTimer < CameraSpeed) {
-            Camera.Position = Vector2.Lerp(CameraStartPos, CameraTarget + CameraOffset, CameraTimer / CameraSpeed);
+        float actualCamSpeed = CameraSpeed / level.Bps;
+        
+        if (CameraTimer < actualCamSpeed) {
+            Camera.Position = Vector2.Lerp(CameraStartPos, CameraTarget + CameraOffset, CameraTimer / actualCamSpeed);
             CameraTimer += GTime.Delta;
 
-            if (CameraTimer >= CameraSpeed) {
+            if (CameraTimer >= actualCamSpeed) {
                 CameraStartPos = Camera.Position;
             }
         }
@@ -84,7 +90,7 @@ public class Player {
         if (finished) return;
 
         // Hitsounds
-        if (!dead && AudioManager.GetFrameTimeOffset() > level.TileData[hitsoundTile].TimingSeconds) {
+        if (!dead && level.TileData.Count > hitsoundTile && AudioManager.GetFrameTimeOffset() > level.TileData[hitsoundTile].TimingSeconds) {
             hitsoundTile++;
             ASound.Play(Sound.HitSound);
         }
@@ -92,10 +98,15 @@ public class Player {
         // The player logic
         Tile nextTile = level.TileData[tile + 1];
         
-        float timing = (nextTile.TimingAngle - curTile.TimingAngle);
-
+        float timing = nextTile.TimingAngle - curTile.TimingAngle;
+        timingDiff = angle - timing;
+        bool pressedAButton = Keyboard.PressedKeys.Length > 0;
+        
+        // Calculate Rating
+        Rating rating = RatingText.GetRatingAndCreateRatingText(timingDiff, pressedAButton, level.Bps, out RatingText rt);
+        
         if (auto || nextTile.MidspinType == MidspinType.Endspin ? angle > timing : 
-                Math.Abs(angle - timing) < 0.5f && Keyboard.PressedKeys.Length > 0) {
+                rating < Rating.EarlyMiss && pressedAButton) {
             lastTime += timing / level.Bps;
 
             tile++;
@@ -126,9 +137,14 @@ public class Player {
             if (tile+1 >= level.TileData.Count) {
                 finished = true;
             }
+
+            rt.pos = pos.ToPoint() - new Point(0,60);
         }
-        else if (angle - timing > 1f) {
+        else if (timingDiff > 2f) {
             dead = true;
+        }
+        else if (rating == Rating.LateMiss) {
+            dying = true;
         }
     }
 
@@ -136,11 +152,12 @@ public class Player {
         // make midspins not flash colors for one frame
         int tCol = tile + (level.TileData[tile].MidspinType == MidspinType.Midspin ? 1 : 0);
 
-        ARender.DrawBlankCentered(new Rectangle(pos.ToPoint(), new Point(40)), Colors[tCol % 2]);
         if (!dead)
-            ARender.DrawBlankCentered(new Rectangle(pos.ToPoint(), new Point(40)),
-                origin:new Vector2(2.5f,0f), 
+            ARender.DrawBlankCentered(
+                new Rectangle(pos.ToPoint(), new Vector2(40).Mul(dying ? (2 - timingDiff/2f)/2 : 1f).ToPoint()),
+                origin:new Vector2(2.5f,0f) * (dying ? (2 - timingDiff)/2 : 1f),
                 rotation:(angle * (Twirl ? -1 : 1) - level.TileData[tile].Angle) * 180, color:Colors[(tCol + 1) % 2]);
+        ARender.DrawBlankCentered(new Rectangle(pos.ToPoint(), new Point(40)), Colors[tCol % 2]);
     }
 }
 
