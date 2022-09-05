@@ -35,7 +35,6 @@ On Linux using flatpak: ~/.var/app/com.valvesoftware.Steam/data/Steam/
 # Current Compatibility Status
 
 ## Known issues
- - Zoom is incapable of going below 85%
  - On older version of ADOFAI that use a string for the angledata, not all the angles are supported
  - There is no countdown for the level to start
 
