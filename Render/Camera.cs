@@ -1,4 +1,3 @@
-using Adofai.Misc;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -48,8 +47,9 @@ public static class Camera {
 
     private static void UpdateMatrix() {
         Transform = Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0)) *
-                Matrix.CreateScale(Zoom) * Matrix.CreateRotationZ(RotationRadians) *
-                Matrix.CreateTranslation(new Vector3(Bounds.Width * 0.5f, Bounds.Height * 0.5f, 0));
+                    Matrix.CreateScale(Zoom) * Matrix.CreateRotationZ(RotationRadians) *
+                    Matrix.CreateTranslation(new Vector3(Bounds.Width * 0.5f, Bounds.Height * 0.5f, Zoom * -0.5f));
+        
         UpdateVisibleArea();
     }
 

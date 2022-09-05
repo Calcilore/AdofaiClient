@@ -27,8 +27,7 @@ public class AdofaiFile {
     // --------------------
 
     public static float ConvertFromAdofaiZoom(float zoom) {
-        // TODO: Made zoom capable of going above 1.9
-        return MathHelper.Min(162f / zoom, 1.9f); // Simplified from 1f / (zoom / 100f) * 1.62f
+        return 162f / zoom; // Simplified from 1f / (zoom / 100f) * 1.62f
     }
 
     // ----------------
