@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using Adofai.Misc;
 using CommandLine;
 
@@ -26,22 +28,26 @@ public static class Program {
     
     [STAThread]
     static void Main(string[] args) {
-        Parser.Default.ParseArguments<Options>(args)
-            .WithParsed(RunOptions)
-            .WithNotParsed(HandleParseError);
+        try {
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(RunOptions);
+        }
+        catch (Exception e) {
+            Logger.Error(e.ToString());
+            Logger.WaitFlush();
+            throw;
+        }
     }
     
     static void RunOptions(Options opts) {
         FilePath = opts.FileName;
         Auto = opts.Auto;
         OffsetOption = opts.Offset / 1000f;
-        Logger.LogLevel = opts.LogLevel;
+        Console.WriteLine("Starting Logger...");
+        Logger.Init(opts.LogLevel);
         
         Logger.Info("Loading Game...");
         using (var game = new MainGame())
             game.Run();
-    }
-    static void HandleParseError(IEnumerable<Error> errs) {
-        
     }
 }
