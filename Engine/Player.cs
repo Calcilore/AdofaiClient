@@ -98,7 +98,7 @@ public class Player {
         // Hitsounds
         if (!dead && level.TileData.Count > hitsoundTile && AudioManager.GetFrameTimeOffset() > level.TileData[hitsoundTile].TimingSeconds) {
             hitsoundTile++;
-            ASound.Play(Sound.HitSound);
+            ASound.Play(Sound.Kick);
         }
         
         // The player logic

@@ -110,9 +110,9 @@
 /processorParam:TextureFormat=Color
 /build:Events/Snail.png
 
-#begin hitsound.wav
+#begin Hitsounds/Kick.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:hitsound.wav
+/build:Hitsounds/Kick.wav
 

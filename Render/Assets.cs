@@ -40,7 +40,7 @@ public static class Assets {
 
         i = 0;
         sounds = new SoundEffect[(int)Sound.Count - 1];
-        LoadSound("hitsound");
+        LoadSound("Hitsounds/Kick");
     }
 }
 
@@ -55,6 +55,6 @@ public enum Texture {
 
 public enum Sound {
     None,
-    HitSound,
-    Count // Texture count, includes None.
+    Kick,
+    Count // Sound count, includes None.
 }
