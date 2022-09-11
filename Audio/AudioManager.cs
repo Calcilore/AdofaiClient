@@ -1,5 +1,7 @@
 using System;
+using Adofai.Misc;
 using LibVLCSharp.Shared;
+using LogLevel = Adofai.Misc.LogLevel;
 
 namespace Adofai.Audio; 
 
@@ -19,9 +21,10 @@ public static class AudioManager {
     public static float LastMusicTime = 0f; // musicTime but last frame
         
     public static void Init() {
-        //Logger.Info("Initialising Audio Manager");
+        Logger.Info("Initialising Audio Manager");
         Core.Initialize();
         _libVLC = new LibVLC(false);
+        _libVLC.Log += HandleLog;
         MediaPlayer = new MediaPlayer(_libVLC);
         MainGame.StaticUpdateEvent += Update;
     }
@@ -98,5 +101,19 @@ public static class AudioManager {
         MediaPlayer.Media = Media;
 
         MediaPlayer.SetRate(speed);
+    }
+    
+    private static void HandleLog(object sender, LogEventArgs args) {
+        LogLevel level = args.Level switch {
+            LibVLCSharp.Shared.LogLevel.Debug => LogLevel.Debug,
+            LibVLCSharp.Shared.LogLevel.Notice => LogLevel.Info,
+            LibVLCSharp.Shared.LogLevel.Warning => LogLevel.Warn,
+            LibVLCSharp.Shared.LogLevel.Error => LogLevel.Error,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+            
+        if (level == LogLevel.Debug) return;
+        
+        Logger.Log($"VLC: {args.Module ?? "none"}: {args.Message}", level);
     }
 }
