@@ -60,4 +60,12 @@ public static class Util {
     public static Point Div(this Point a, int b) {
         return new Point(a.X / b, a.Y / b);
     }
+
+    public static Point MulFloat(this Point a, float b) {
+        return new Point((int)(a.X * b), (int)(a.Y * b));
+    }
+    
+    public static Point DivFloat(this Point a, float b) {
+        return new Point((int)(a.X / b), (int)(a.Y / b));
+    }
 }
