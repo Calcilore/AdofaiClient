@@ -17,7 +17,7 @@ public static class VolumeManager {
 
     public static void Init() {
         MainGame.StaticUpdateEvent += Update;
-        MainGame.StaticDrawHUDEvent += DrawHud;
+        MainGame.StaticDrawHudEvent += DrawHud;
 
         Volume = 0;
         songVolume = 0.6f;

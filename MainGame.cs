@@ -15,8 +15,8 @@ public class MainGame : Game {
     public static UpdateEventD UpdateEvent;
     public static UpdateEventD StaticDrawEvent;
     public static UpdateEventD DrawEvent;
-    public static UpdateEventD StaticDrawHUDEvent;
-    public static UpdateEventD DrawHUDEvent;
+    public static UpdateEventD StaticDrawHudEvent;
+    public static UpdateEventD DrawHudEvent;
     
     public static GraphicsDeviceManager Graphics;
     public static SpriteBatch SpriteBatch;
@@ -42,7 +42,7 @@ public class MainGame : Game {
         StaticUpdateEvent += Keyboard.Update;
         StaticUpdateEvent += Mouse.Update;
         StaticUpdateEvent += fpsCounter.Update;
-        StaticDrawHUDEvent += fpsCounter.Draw;
+        StaticDrawHudEvent += fpsCounter.Draw;
 
         base.Initialize();
     }
@@ -79,8 +79,8 @@ public class MainGame : Game {
         
         ARender.DrawPre();
         SpriteBatch.Begin(sortMode:SpriteSortMode.FrontToBack);
-        DrawHUDEvent?.Invoke();
-        StaticDrawHUDEvent?.Invoke();
+        DrawHudEvent?.Invoke();
+        StaticDrawHudEvent?.Invoke();
         SpriteBatch.End();
 
         base.Draw(gameTime);

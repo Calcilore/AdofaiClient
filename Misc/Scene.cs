@@ -11,7 +11,7 @@ public static class SceneLoader {
         currentScene?.UnloadScene();
         MainGame.DrawEvent = null;
         MainGame.UpdateEvent = null;
-        MainGame.DrawHUDEvent = null;
+        MainGame.DrawHudEvent = null;
 
         // Load new scene
         currentScene = scene;
